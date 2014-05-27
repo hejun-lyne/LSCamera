@@ -1,0 +1,5 @@
+LSCamera
+===
+视频拍摄framework，支持分段拍摄和背景音乐
+---
+[淘视频](http://gitlab.alibaba-inc.com/hejun.lhj/taovideo)使用了该framework
