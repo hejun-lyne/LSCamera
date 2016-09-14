@@ -10,6 +10,8 @@
 #import "AKCameraUtils.h"
 #import "AKCameraTool.h"
 #import <OpenGLES/EAGL.h>
+#import <OpenGLES/ES2/glext.h>
+#import <OpenGLES/ES3/glext.h>
 #import "AKCameraDefines.h"
 
 enum
@@ -35,7 +37,7 @@ static AKCameraExporter *instance;
     
     // timestamps
     int32_t _currentFrame;
-
+    
     // flags
     struct {
         unsigned int recording:1;
@@ -77,8 +79,8 @@ static AKCameraExporter *instance;
     NSMutableArray *_currentKeyFrames;
     
     AVAssetWriter *assetWriter;
-	AVAssetWriterInput *assetWriterAudioIn;
-	AVAssetWriterInput *assetWriterVideoIn;
+    AVAssetWriterInput *assetWriterAudioIn;
+    AVAssetWriterInput *assetWriterVideoIn;
     AVAssetWriterInputPixelBufferAdaptor *assetWriterPixelBufferInput;
     
     NSMutableArray *usedFiles;
@@ -584,7 +586,7 @@ static AKCameraExporter *instance;
             NSLog(@"%@", anException);
             return NO;
         }
-
+        
         if (assetWriter.error) {
             //DLog(@"finish assetWriter error: %@", assetWriter.error);
             return NO;
@@ -687,20 +689,20 @@ typedef void (^AKCameraExporterBlock)();
 {
     CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
     
-	const AudioStreamBasicDescription *asbd = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription);
+    const AudioStreamBasicDescription *asbd = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription);
     if (!asbd) {
         //DLog(@"audio stream description used with non-audio format description");
         return NO;
     }
     
-	unsigned int channels = asbd->mChannelsPerFrame;
+    unsigned int channels = asbd->mChannelsPerFrame;
     double sampleRate = asbd->mSampleRate;
     
     //DLog(@"audio stream setup, channels (%d) sampleRate (%f)", channels, sampleRate);
     
     size_t aclSize = 0;
-	const AudioChannelLayout *currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, &aclSize);
-	NSData *currentChannelLayoutData = ( currentChannelLayout && aclSize > 0 ) ? [NSData dataWithBytes:currentChannelLayout length:aclSize] : [NSData data];
+    const AudioChannelLayout *currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, &aclSize);
+    NSData *currentChannelLayoutData = ( currentChannelLayout && aclSize > 0 ) ? [NSData dataWithBytes:currentChannelLayout length:aclSize] : [NSData data];
     
     NSDictionary *audioCompressionSettings = @{ AVFormatIDKey : @(kAudioFormatMPEG4AAC),
                                                 AVNumberOfChannelsKey : @(channels),
@@ -714,7 +716,7 @@ typedef void (^AKCameraExporterBlock)();
 - (BOOL)_setupMediaWriterVideoInputWithSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
     CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
-	CMVideoDimensions dimensions = CMVideoFormatDescriptionGetDimensions(formatDescription);
+    CMVideoDimensions dimensions = CMVideoFormatDescriptionGetDimensions(formatDescription);
     
     CMVideoDimensions videoDimensions = dimensions;
     switch (_outputFormat) {
@@ -739,7 +741,7 @@ typedef void (^AKCameraExporterBlock)();
     NSDictionary *compressionSettings = @{ AVVideoAverageBitRateKey : @(_videoAssetBitRate),
                                            AVVideoMaxKeyFrameIntervalKey : @(_videoAssetFrameInterval) };
     
-	NSDictionary *videoSettings = @{ AVVideoCodecKey : AVVideoCodecH264,
+    NSDictionary *videoSettings = @{ AVVideoCodecKey : AVVideoCodecH264,
                                      AVVideoScalingModeKey : AVVideoScalingModeResizeAspectFill,
                                      AVVideoWidthKey : @(videoDimensions.width),
                                      AVVideoHeightKey : @(videoDimensions.height),
@@ -750,55 +752,55 @@ typedef void (^AKCameraExporterBlock)();
 
 - (BOOL)setupAudioOutputDeviceWithSettings:(NSDictionary *)audioSettings
 {
-	if ([assetWriter canApplyOutputSettings:audioSettings forMediaType:AVMediaTypeAudio]) {
+    if ([assetWriter canApplyOutputSettings:audioSettings forMediaType:AVMediaTypeAudio]) {
         
-		assetWriterAudioIn = [[AVAssetWriterInput alloc] initWithMediaType:AVMediaTypeAudio outputSettings:audioSettings];
-		assetWriterAudioIn.expectsMediaDataInRealTime = YES;
+        assetWriterAudioIn = [[AVAssetWriterInput alloc] initWithMediaType:AVMediaTypeAudio outputSettings:audioSettings];
+        assetWriterAudioIn.expectsMediaDataInRealTime = YES;
         
         NSLog(@"prepared audio-in with compression settings sampleRate (%f) channels (%lu) bitRate (%ld)",
-             [[audioSettings objectForKey:AVSampleRateKey] floatValue],
-             (unsigned long)[[audioSettings objectForKey:AVNumberOfChannelsKey] unsignedIntegerValue],
-             (long)[[audioSettings objectForKey:AVEncoderBitRateKey] integerValue]);
+              [[audioSettings objectForKey:AVSampleRateKey] floatValue],
+              (unsigned long)[[audioSettings objectForKey:AVNumberOfChannelsKey] unsignedIntegerValue],
+              (long)[[audioSettings objectForKey:AVEncoderBitRateKey] integerValue]);
         
-		if ([assetWriter canAddInput:assetWriterAudioIn]) {
-			[assetWriter addInput:assetWriterAudioIn];
+        if ([assetWriter canAddInput:assetWriterAudioIn]) {
+            [assetWriter addInput:assetWriterAudioIn];
             _flags.isAudioReady = YES;
-		} else {
-			//DLog(@"couldn't add asset writer audio input");
-		}
+        } else {
+            //DLog(@"couldn't add asset writer audio input");
+        }
         
-	} else {
+    } else {
         
-		//DLog(@"couldn't apply audio output settings");
+        //DLog(@"couldn't apply audio output settings");
         
-	}
+    }
     
     return _flags.isAudioReady;
 }
 
 - (BOOL)setupVideoOutputDeviceWithSettings:(NSDictionary *)videoSettings
 {
-	if ([assetWriter canApplyOutputSettings:videoSettings forMediaType:AVMediaTypeVideo]) {
-		assetWriterVideoIn = [[AVAssetWriterInput alloc] initWithMediaType:AVMediaTypeVideo outputSettings:videoSettings];
-		assetWriterVideoIn.expectsMediaDataInRealTime = YES;
-		assetWriterVideoIn.transform = CGAffineTransformIdentity;
+    if ([assetWriter canApplyOutputSettings:videoSettings forMediaType:AVMediaTypeVideo]) {
+        assetWriterVideoIn = [[AVAssetWriterInput alloc] initWithMediaType:AVMediaTypeVideo outputSettings:videoSettings];
+        assetWriterVideoIn.expectsMediaDataInRealTime = YES;
+        assetWriterVideoIn.transform = CGAffineTransformIdentity;
         
         NSDictionary *videoCompressionProperties = [videoSettings objectForKey:AVVideoCompressionPropertiesKey];
         if (videoCompressionProperties)
             NSLog(@"prepared video-in with compression settings bps (%f) frameInterval (%ld)",
-                 [[videoCompressionProperties objectForKey:AVVideoAverageBitRateKey] floatValue],
-                 (long)[[videoCompressionProperties objectForKey:AVVideoMaxKeyFrameIntervalKey] integerValue]);
+                  [[videoCompressionProperties objectForKey:AVVideoAverageBitRateKey] floatValue],
+                  (long)[[videoCompressionProperties objectForKey:AVVideoMaxKeyFrameIntervalKey] integerValue]);
         
-		if ([assetWriter canAddInput:assetWriterVideoIn]) {
-			[assetWriter addInput:assetWriterVideoIn];
+        if ([assetWriter canAddInput:assetWriterVideoIn]) {
+            [assetWriter addInput:assetWriterVideoIn];
             _flags.isVideoReady = YES;
-		} else {
-			//DLog(@"couldn't add asset writer video input");
-		}
-	} else {
-		//DLog(@"couldn't apply video output settings");
+        } else {
+            //DLog(@"couldn't add asset writer video input");
+        }
+    } else {
+        //DLog(@"couldn't apply video output settings");
         
-	}
+    }
     
     return _flags.isVideoReady;
 }
@@ -1062,8 +1064,8 @@ typedef void (^AKCameraExporterBlock)();
     }
     
     glBindTexture(CVOpenGLESTextureGetTarget(_lumaTexture), CVOpenGLESTextureGetName(_lumaTexture));
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
     // UV-plane
     glActiveTexture(GL_TEXTURE1);
@@ -1084,8 +1086,8 @@ typedef void (^AKCameraExporterBlock)();
     }
     
     glBindTexture(CVOpenGLESTextureGetTarget(_chromaTexture), CVOpenGLESTextureGetName(_chromaTexture));
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
     if (CVPixelBufferUnlockBaseAddress(imageBuffer, 0) != kCVReturnSuccess)
         return;
@@ -1095,12 +1097,12 @@ typedef void (^AKCameraExporterBlock)();
 
 - (void)processSampleBuffer:(CMSampleBufferRef)sampleBuffer isAudio:(BOOL)isAudio isVideo:(BOOL)isVideo{
     /*
-    if (isAudio) {
-        //DLog(@"we have a audio buffer");
-    }
-    if (isVideo) {
-        //DLog(@"we have a video buffer");
-    }
+     if (isAudio) {
+     //DLog(@"we have a audio buffer");
+     }
+     if (isVideo) {
+     //DLog(@"we have a video buffer");
+     }
      */
     if (!CMSampleBufferDataIsReady(sampleBuffer)) {
         //DLog(@"audio buffer data is not ready");
@@ -1267,40 +1269,40 @@ typedef void (^AKCameraExporterBlock)();
 
 - (void)writeSampleBuffer:(CMSampleBufferRef)sampleBuffer ofType:(NSString *)mediaType
 {
-	if ( assetWriter.status == AVAssetWriterStatusUnknown ) {
+    if ( assetWriter.status == AVAssetWriterStatusUnknown ) {
         
         if ([assetWriter startWriting]) {
             CMTime startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-			[assetWriter startSessionAtSourceTime:startTime];
+            [assetWriter startSessionAtSourceTime:startTime];
             _startTimestamp = startTime;
             //DLog(@"started writing with status (%ld)", (long)assetWriter.status);
-		} else {
-			//DLog(@"error when starting to write (%@)", [assetWriter error]);
-		}
+        } else {
+            //DLog(@"error when starting to write (%@)", [assetWriter error]);
+        }
         
-	}
+    }
     
     if ( assetWriter.status == AVAssetWriterStatusFailed ) {
         //DLog(@"writer failure, (%@)", assetWriter.error.localizedDescription);
         return;
     }
-	
-	if ( assetWriter.status == AVAssetWriterStatusWriting ) {
-		if (mediaType == AVMediaTypeVideo) {
-			if (assetWriterVideoIn.readyForMoreMediaData) {
-				if (![assetWriterVideoIn appendSampleBuffer:sampleBuffer]) {
-					//DLog(@"writer error appending video (%@)", [assetWriter error]);
-				}
-			}
-		} else if (mediaType == AVMediaTypeAudio) {
-			if (assetWriterAudioIn.readyForMoreMediaData) {
-				if (![assetWriterAudioIn appendSampleBuffer:sampleBuffer]) {
-					//DLog(@"writer error appending audio (%@)", [assetWriter error]);
-				}
-			}
-		}
+    
+    if ( assetWriter.status == AVAssetWriterStatusWriting ) {
+        if (mediaType == AVMediaTypeVideo) {
+            if (assetWriterVideoIn.readyForMoreMediaData) {
+                if (![assetWriterVideoIn appendSampleBuffer:sampleBuffer]) {
+                    //DLog(@"writer error appending video (%@)", [assetWriter error]);
+                }
+            }
+        } else if (mediaType == AVMediaTypeAudio) {
+            if (assetWriterAudioIn.readyForMoreMediaData) {
+                if (![assetWriterAudioIn appendSampleBuffer:sampleBuffer]) {
+                    //DLog(@"writer error appending audio (%@)", [assetWriter error]);
+                }
+            }
+        }
         
-	}
+    }
     
 }
 
@@ -1510,9 +1512,9 @@ typedef void (^AKCameraExporterBlock)();
     size_t height = CVPixelBufferGetHeight(imageBuffer);
     
     /*
-    if (height != width) {
-        height = width; //make it square --hejun.lhj
-    }
+     if (height != width) {
+     height = width; //make it square --hejun.lhj
+     }
      */
     
     // Create a device-dependent RGB color space

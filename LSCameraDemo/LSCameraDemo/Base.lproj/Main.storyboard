@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Camera View Controller-->
@@ -13,67 +16,71 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Fu-ma-syW">
-                                <rect key="frame" x="120" y="145" width="80" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Fu-ma-syW">
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="默认拍摄">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="startRecordWithDefault:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="JzB-3l-66m"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5JT-WO-u4l">
-                                <rect key="frame" x="96" y="209" width="128" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5JT-WO-u4l">
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="淘视频定制拍摄">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="startRecordWithTaoVideo:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="21g-qV-NLZ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V0t-L5-tt9">
-                                <rect key="frame" x="120" y="283" width="80" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V0t-L5-tt9">
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="预览">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="preview:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="WpS-h2-Deq"/>
                                     <action selector="startRecordWithTaoVideo:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="BIU-4q-LZC"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="LSCameraDemo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="833-Ti-c09">
-                                <rect key="frame" x="93" y="34" width="135" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LSCameraDemo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="833-Ti-c09">
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PrB-vM-ro4">
-                                <rect key="frame" x="0.0" y="70" width="320" height="1"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.094117647060000004" green="0.72941176470000002" blue="0.98039215690000003" alpha="1" colorSpace="deviceRGB"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PrB-vM-ro4">
+                                <color key="backgroundColor" red="0.11460787057876587" green="0.66877198219299316" blue="0.97397267818450928" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="V0t-L5-tt9" firstAttribute="top" secondItem="5JT-WO-u4l" secondAttribute="bottom" constant="49" id="053-8f-t9x"/>
+                            <constraint firstItem="9Fu-ma-syW" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="AgZ-O9-5F3"/>
+                            <constraint firstItem="833-Ti-c09" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" id="Dqj-bz-OS3"/>
+                            <constraint firstItem="9Fu-ma-syW" firstAttribute="top" secondItem="PrB-vM-ro4" secondAttribute="bottom" constant="74" id="Mo6-Mk-gyu"/>
+                            <constraint firstItem="833-Ti-c09" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="QJw-L4-7RG"/>
+                            <constraint firstItem="9Fu-ma-syW" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="125" id="X0Q-cv-edo"/>
+                            <constraint firstItem="PrB-vM-ro4" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="akX-9e-Iy6"/>
+                            <constraint firstItem="PrB-vM-ro4" firstAttribute="width" secondItem="kh9-bI-dsS" secondAttribute="width" id="hey-QU-Sut"/>
+                            <constraint firstItem="5JT-WO-u4l" firstAttribute="top" secondItem="9Fu-ma-syW" secondAttribute="bottom" constant="32" id="oWP-12-kzx"/>
+                            <constraint firstItem="5JT-WO-u4l" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="pdf-vz-O9v"/>
+                            <constraint firstItem="PrB-vM-ro4" firstAttribute="top" secondItem="833-Ti-c09" secondAttribute="bottom" constant="21" id="tlm-xB-WTr"/>
+                            <constraint firstItem="V0t-L5-tt9" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="zq2-MF-JP1"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-71" y="80"/>
+            <point key="canvasLocation" x="-71.5" y="79.5"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
+        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
     </simulatedMetricsContainer>
 </document>
