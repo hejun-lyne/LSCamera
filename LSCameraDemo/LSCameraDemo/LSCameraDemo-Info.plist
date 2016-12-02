@@ -24,6 +24,12 @@
 	<string>1.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>请求获取摄像头权限</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>请求获取麦克风权限</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>请求获取相册权限</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
